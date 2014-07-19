@@ -2,7 +2,7 @@ package com.github.jreddit.message;
 
 /**
  * Encapsulates the private messages.
- * Corresponds to the <code>Kind.MESSAGES</code>, which is has the value t4 for the Reddit API
+ * Corresponds to the <code>TypePrefix.MESSAGES</code>, which is has the value t4 for the Reddit API
  *
  * @author Karan Goel
  * @author Raul Rene Lepsa
@@ -29,9 +29,6 @@ public class Message {
 
 	// If the message was a comment or not
 	private boolean isComment;
-
-    // If it is a comment, it has a parent
-    private String parentId;
 	
 	// Timestamp of when the message was created
 	private String created;
@@ -131,13 +128,5 @@ public class Message {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 }

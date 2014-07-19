@@ -1,7 +1,5 @@
 package com.github.jreddit.comment;
 
-import java.util.List;
-
 /**
  * A Reddit comment. Contains the edited timestamp, the body
  *
@@ -11,55 +9,38 @@ import java.util.List;
 public class Comment {
 
 
-    private String id;
-    private String author;
-    private String fullname;
-    private String parentId;
-    private String body;            // The actual body
-    private String edited;          // Edited timestamp
-    private String created;         // Created UTC timestamp
-    private List<Comment> replies;  // Replies to this comment
-    private Integer upvotes;        // Number of upvotes that this body received
-    private Integer downvotes;      // Number of downvotes that this body received
+    private String comment;     // The actual comment
+    private String edited;      // Edited timestamp
+    private String created;     // Created UTC timestamp
+    private String replies;     // Replies
+    private int upvotes;        // Number of upvotes that this comment received
+    private int downvotes;      // Number of downvotes that this comment received
 
-    public String getId() {
-        return id;
+    /**
+     * The constructor.
+     *
+     * @param comment   The comment.
+     * @param edited    The edited timestamp.
+     * @param created   The UTC created timestamp.
+     * @param replies   The replies.
+     * @param upvotes   Number of upvotes that this comment received.
+     * @param downvotes Number of downvotes that this comment received.
+     */
+    public Comment(String comment, String edited, String created, String replies, int upvotes, int downvotes) {
+        this.comment = comment;
+        this.edited = edited;
+        this.created = created;
+        this.replies = replies;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getComment() {
+        return comment;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getEdited() {
@@ -78,27 +59,27 @@ public class Comment {
         this.created = created;
     }
 
-    public List<Comment> getReplies() {
+    public String getReplies() {
         return replies;
     }
 
-    public void setReplies(List<Comment> replies) {
+    public void setReplies(String replies) {
         this.replies = replies;
     }
 
-    public Integer getUpvotes() {
+    public int getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(Integer upvotes) {
+    public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
     }
 
-    public Integer getDownvotes() {
+    public int getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(Integer downvotes) {
+    public void setDownvotes(int downvotes) {
         this.downvotes = downvotes;
     }
 }

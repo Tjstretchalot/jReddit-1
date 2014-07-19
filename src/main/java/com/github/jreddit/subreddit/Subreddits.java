@@ -27,8 +27,6 @@ public class Subreddits {
 
     /**
      * Returns the subreddits that make up the default front page of reddit.
-     *
-     * @return the subreddits that make up the default front page of reddit.
      */
     public List<Subreddit> listDefault() {
         List<Subreddit> subreddits = null;

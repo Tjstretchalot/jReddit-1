@@ -1,5 +1,12 @@
 package com.github.jreddit.utils;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.github.jreddit.user.User;
+import com.github.jreddit.utils.restclient.Response;
+import com.github.jreddit.utils.restclient.RestClient;
+
 /**
  * Some constants that are used for specifying Reddit API endpoints (example: /api/new_captcha)
  *
@@ -34,17 +41,7 @@ public class ApiEndpointUtils {
     public static final String SUBMISSION_UNMARK_AS_NSFW = REDDIT_BASE_API_ENDPOINT + "/unmarknsfw";
     
     public static final String SUBMISSION_VOTE = REDDIT_BASE_API_ENDPOINT + "/vote";
-
-    public static final String SUBMISSION_SAVE = REDDIT_BASE_API_ENDPOINT + "/save";
-
-    public static final String SUBMISSION_UNSAVE = REDDIT_BASE_API_ENDPOINT + "/unsave";
-
-    public static final String SUBMISSION_HIDE = REDDIT_BASE_API_ENDPOINT + "/hide";
-
-    public static final String SUBMISSION_UNHIDE = REDDIT_BASE_API_ENDPOINT + "/unhide";
-
-    public static final String SUBMISSION_COMMENTS = "/r/%s/comments/%s.json?%s";
-
+    
     /* User specific constants */
     
     public static final String USER_LOGIN = REDDIT_BASE_API_ENDPOINT + "/login/%s";
@@ -63,7 +60,7 @@ public class ApiEndpointUtils {
 
     public static final String USER_INFO = REDDIT_BASE_API_ENDPOINT + "/me.json";
     
-    public static final String USER_UPDATE = REDDIT_BASE_API_ENDPOINT + "/update";
+	public static final String USER_UPDATE = REDDIT_BASE_API_ENDPOINT + "/update";
 
     /* Subreddits specific constants */
 
@@ -73,4 +70,17 @@ public class ApiEndpointUtils {
     
     public static final String SUBMISSIONS = "/r/%s/.json";
 
+    /* Misc */
+    
+    public static final String FULLNAME_TO_LINK = REDDIT_BASE_API_ENDPOINT + "/info.json";
+    
+    public static String getFullnameFromLink(RestClient client, User user, String fullname) {
+    	Response response = client.get(FULLNAME_TO_LINK + "?id=" + fullname, user.getCookie());
+    	JSONObject data = (JSONObject) ((JSONObject) response.getResponseObject()).get("data");
+    	JSONArray children = (JSONArray) data.get("children");
+    	JSONObject first = (JSONObject) children.get(0);
+    	data = (JSONObject) first.get("data");
+    	
+    	return REDDIT_BASE_URL + data.get("permalink");
+    }
 }

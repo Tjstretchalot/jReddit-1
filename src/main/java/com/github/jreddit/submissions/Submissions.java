@@ -1,9 +1,6 @@
 package com.github.jreddit.submissions;
 
-import static com.github.jreddit.utils.restclient.JsonUtils.safeJsonToString;
 import com.github.jreddit.user.User;
-import com.github.jreddit.utils.ApiEndpointUtils;
-import com.github.jreddit.utils.PaginationResult;
 import com.github.jreddit.utils.restclient.RestClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import com.github.jreddit.utils.ApiEndpointUtils;
 
 /**
  * This class offers some submission utilities.
@@ -36,18 +34,18 @@ public class Submissions {
     }
 
     /**
-     * This function returns a list containing the submissions on a given
+     * This function returns a linked list containing the submissions on a given
      * subreddit and page. (in progress)
      *
      * @param redditName The subreddit's name
      * @param type       HOT or NEW and some others to come
      * @param frontpage       TODO this
      * @param user       The user
-     * @return The list containing submissions
+     * @return The linked list containing submissions
      * @throws IOException    If connection fails
      * @throws ParseException If JSON parsing fails
      */
-    public List<Submission> getSubmissions(String redditName,
+    public LinkedList<Submission> getSubmissions(String redditName,
                        Popularity type, Page frontpage, User user) throws IOException, ParseException {
 
         LinkedList<Submission> submissions = new LinkedList<Submission>();
@@ -69,14 +67,15 @@ public class Submissions {
         JSONArray array = (JSONArray) ((JSONObject) object.get("data")).get("children");
 
         JSONObject data;
-        Submission submission;
         for (Object anArray : array) {
             data = (JSONObject) anArray;
             data = ((JSONObject) data.get("data"));
-            submission = new Submission(data);
-            submission.setUser(user);
-            submissions.add(submission);
-
+            Submission subm = new Submission(user, data.get("id").toString(), (data.get("permalink").toString()));
+            subm.setTitle((String) data.get("title"));
+            subm.setAuthor((String) data.get("author"));
+            subm.setAuthorFlairCSSClass((String) data.get("author_flair_css_class"));
+            
+            submissions.add(subm);
         }
 
         return submissions;
@@ -86,22 +85,16 @@ public class Submissions {
      * Returns a list of submissions from a subreddit.
      *
      * @param subreddit The subreddit at which submissions you want to retrieve submissions.
-     * @return <code>PaginationResult<Submission></Submission></code> of submissions on the subreddit.
+     * @return <code>List</code> of submissions on the subreddit.
      */
-    public PaginationResult<Submission> getSubmissions(String subreddit, String after) {
-        PaginationResult<Submission> result = new PaginationResult();
+    public List<Submission> getSubmissions(String subreddit) {
+        // List of submissions made by this user
         List<Submission> submissions = new ArrayList<Submission>(500);
         try {
             // Send GET request to get the account overview
-            String endPoint = String.format(ApiEndpointUtils.SUBMISSIONS, subreddit);
-            if (after != null)
-                endPoint += "?after=" + after;
-
-            JSONObject object = (JSONObject) restClient.get(endPoint, null);
+            JSONObject object = (JSONObject) restClient.get(String.format(ApiEndpointUtils.SUBMISSIONS, subreddit), null);
             JSONObject data = (JSONObject) object.get("data");
             JSONArray children = (JSONArray) data.get("children");
-
-            result.setAfter( safeJsonToString( data.get("after") ) );
 
             JSONObject obj;
 
@@ -117,7 +110,6 @@ public class Submissions {
         }
 
         // Return the submissions
-        result.setResults(submissions);
-        return result;
+        return submissions;
     }
 }

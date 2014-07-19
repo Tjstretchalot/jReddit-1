@@ -1,6 +1,5 @@
 package com.github.jreddit.utils.restclient;
 
-import com.github.jreddit.exception.InvalidURIException;
 import com.github.jreddit.utils.ApiEndpointUtils;
 import com.github.jreddit.utils.restclient.methodbuilders.HttpGetMethodBuilder;
 import com.github.jreddit.utils.restclient.methodbuilders.HttpPostMethodBuilder;
@@ -59,9 +58,6 @@ public class HttpRestClient implements RestClient {
         catch (URISyntaxException e) {
             System.err.println("Error making creating URI bad path: " + urlPath);
         }
-        catch (InvalidURIException e) {
-            System.err.println("Error making GET request to invalid URI path: " + urlPath);
-        }
         catch (IOException e) {
             System.err.println("Error making GET request to URL path: " + urlPath);
         }
@@ -71,16 +67,10 @@ public class HttpRestClient implements RestClient {
         return null;
     }
 
-    public Response get(HttpGetMethodBuilder getMethodBuilder) throws IOException, ParseException, InvalidURIException {
+    public Response get(HttpGetMethodBuilder getMethodBuilder) throws IOException, ParseException {
         getMethodBuilder.withUserAgent(userAgent);
         HttpGet request = getMethodBuilder.build();
-
-        Response response = httpClient.execute(request, responseHandler);
-        if (response.getStatusCode() == 404) {
-            throw new InvalidURIException();
-        }
-
-        return response;
+        return httpClient.execute(request, responseHandler);
     }
 
     @Override
@@ -97,7 +87,8 @@ public class HttpRestClient implements RestClient {
             System.err.println("Error making creating URI bad path: " + urlPath);
         }
         catch (IOException e) {
-            System.err.println("Error making GET request to URL path: " + urlPath);
+        	e.printStackTrace();
+            System.err.println("Error making POST request to URL path: " + urlPath);
         }
         catch (ParseException e) {
             System.err.println("Error parsing response from POST request for URL path: " + urlPath);

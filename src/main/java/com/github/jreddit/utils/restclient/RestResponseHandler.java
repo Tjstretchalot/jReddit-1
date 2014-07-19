@@ -28,7 +28,7 @@ public class RestResponseHandler implements ResponseHandler<Response> {
             return parse(response);
         }
         catch (ParseException e) {
-            System.err.println("Error parsing response from Reddit");
+            System.err.println("Error parsing response");
         }
         return null;
     }

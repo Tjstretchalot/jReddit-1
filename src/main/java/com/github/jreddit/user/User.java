@@ -219,7 +219,7 @@ public class User extends Thing {
      * @param username The username of the user whose account info you want to retrieve.
      * @return UserInfo object consisting of information about the user identified by "username".
      */
-    public UserInfo about(String username) {
+    public static UserInfo about(RestClient restClient, String username) {
 
         // Send GET request to get the account overview
         JSONObject object = (JSONObject) restClient.get(String.format(ApiEndpointUtils.USER_ABOUT, username), null).getResponseObject();
