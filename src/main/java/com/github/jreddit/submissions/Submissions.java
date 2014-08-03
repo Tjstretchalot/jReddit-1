@@ -73,6 +73,9 @@ public class Submissions {
             Submission subm = new Submission(user, data.get("id").toString(), (data.get("permalink").toString()));
             subm.setTitle((String) data.get("title"));
             subm.setAuthor((String) data.get("author"));
+            subm.setSubreddit((String) data.get("subreddit"));
+            subm.setNSFW(data.get("over_18") == Boolean.TRUE);
+            subm.setCreatedUTC(((Number) data.get("created_utc")).doubleValue());
             subm.setAuthorFlairCSSClass((String) data.get("author_flair_css_class"));
             
             submissions.add(subm);

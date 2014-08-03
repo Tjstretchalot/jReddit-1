@@ -388,6 +388,10 @@ public class Submission extends Thing {
 		createdUTC = Double.parseDouble(info(url).get("created_utc").toString());
 		return createdUTC;
 	}
+	
+	public double createdUTC() {
+		return createdUTC;
+	}
 
 
 	public String getAuthorFlairCSSClass() {
