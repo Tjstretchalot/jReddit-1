@@ -108,8 +108,9 @@ public class User extends Thing {
      * @param subreddit The subreddit to submit to
      * @throws IOException    If connection fails
      * @throws ParseException If JSON Parsing fails
+     * @returns The full link to the submission if successful, otherwise null
      */
-    public void submitSelfPost(String title, String text, String subreddit)
+    public String submitSelfPost(String title, String text, String subreddit)
             throws IOException, ParseException {
         JSONObject object = submit(title, text, true, subreddit);
         if (object.toJSONString().contains(".error.USER_REQUIRED")) {
@@ -124,11 +125,23 @@ public class User extends Thing {
             System.err.println("That link has already been submitted.");
         }
         else {
-            System.out.println("Self post submitted to "
-                    + ((JSONArray) ((JSONArray) ((JSONArray) object.get("jquery")).get(10)).get(3)).get(0));
+        	return (String) ((JSONArray) ((JSONArray) ((JSONArray) object.get("jquery")).get(10)).get(3)).get(0);
         }
+        return null;
     }
 
+
+	public void edit(String fullname, String text) {
+		JSONObject object = (JSONObject) restClient.post("api_type=json&thing_id=" + fullname + "&text=" + text + "&uh=" + getModhash(),
+                ApiEndpointUtils.USER_EDITUSERTEXT, getCookie()).getResponseObject();
+		
+		JSONObject json = (JSONObject) object.get("json");
+		JSONArray errors = (JSONArray) json.get("errors");
+		if(errors.size() != 0) {
+			System.err.println("Failed to edit " + fullname + ": " + errors.toJSONString());
+		}
+	}
+	
     /**
      * This function changes user's password
      * Requires authentication.

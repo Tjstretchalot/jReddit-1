@@ -61,6 +61,8 @@ public class ApiEndpointUtils {
     public static final String USER_INFO = REDDIT_BASE_API_ENDPOINT + "/me.json";
     
 	public static final String USER_UPDATE = REDDIT_BASE_API_ENDPOINT + "/update";
+	
+	public static final String USER_EDITUSERTEXT = REDDIT_BASE_API_ENDPOINT + "/editusertext";
 
     /* Subreddits specific constants */
 
@@ -73,6 +75,7 @@ public class ApiEndpointUtils {
     /* Misc */
     
     public static final String FULLNAME_TO_LINK = REDDIT_BASE_API_ENDPOINT + "/info.json";
+
     
     public static String getFullnameFromLink(RestClient client, User user, String fullname) {
     	Response response = client.get(FULLNAME_TO_LINK + "?id=" + fullname, user.getCookie());

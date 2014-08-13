@@ -73,6 +73,16 @@ public class Submission extends Thing {
 		restClient = new HttpRestClient();
 	}
 
+	public Submission(User user, String fullName, String url) {
+		// TODO: Refactor this to use TypePrefix enum
+		if (fullName.startsWith("t3_"))
+			fullName = fullName.replaceFirst("t3_", "");
+
+		this.user = user;
+		this.fullName = "t3_" + fullName;
+		this.url = url;
+	}
+
 	// this is very stinky..
 	public void setRestClient(RestClient restClient) {
 		this.restClient = restClient;
@@ -134,15 +144,6 @@ public class Submission extends Thing {
 		return url;
 	}
 
-	public Submission(User user, String fullName, String url) {
-		// TODO: Refactor this to use TypePrefix enum
-		if (fullName.startsWith("t3_"))
-			fullName = fullName.replaceFirst("t3_", "");
-
-	this.user = user;
-	this.fullName = "t3_" + fullName;
-	this.url = url;
-	}
 
 	/**
 	 * This function comments on this submission saying the comment specified in
@@ -164,7 +165,7 @@ public class Submission extends Thing {
 			throw new InvalidCookieException("Cookie not present");
 		else
 			System.out.println("Commented on thread id " + fullName);
-//					+ " saying: \"" + text + "\"");
+		//					+ " saying: \"" + text + "\"");
 	}
 
 	/**
@@ -388,7 +389,7 @@ public class Submission extends Thing {
 		createdUTC = Double.parseDouble(info(url).get("created_utc").toString());
 		return createdUTC;
 	}
-	
+
 	public double createdUTC() {
 		return createdUTC;
 	}
@@ -402,6 +403,7 @@ public class Submission extends Thing {
 	public void setAuthorFlairCSSClass(String authorFlairCSSClass) {
 		this.authorFlairCSSClass = authorFlairCSSClass;
 	}
+
 
 	//    @Override
 	//    public String toString() {
